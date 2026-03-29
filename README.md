@@ -2,17 +2,30 @@
 
 Production-ready Customer Relationship Management web application built with a modern stack.
 
+## 🌐 Live Demo
+
+| Service | URL |
+|---------|-----|
+| **Frontend (Live App)** | https://future-fs-02-lac.vercel.app |
+| **Backend API** | https://future-fs-02-1-42q7.onrender.com |
+| **GitHub Repository** | https://github.com/lokeshmeesala05-commits/FUTURE_FS_02.git |
+
 ## Tech Stack
 - **Frontend**: React.js (Vite), Tailwind CSS, React Router DOM, Recharts, Lucide React
 - **Backend**: Node.js, Express.js, Sequelize ORM, JWT Authentication
-- **Database**: MySQL
+- **Database**: MySQL / TiDB Cloud (Serverless)
+- **Hosting**: Vercel (Frontend) + Render (Backend) + TiDB Cloud (DB)
 
 ## Features
-- JWT-based Auth with Role-based access (Admin, Sales User)
-- Comprehensive Lead Management (CRUD, Search, Filtering)
-- Activity Timeline tracking for each lead
-- Analytics Dashboard with status charts and conversion rates
-- Responsive, modern UI using Tailwind CSS
+- 🔐 JWT-based Authentication with Role-based access (Admin, Sales User)
+- 📋 Comprehensive Lead Management (CRUD, Search, Filtering, Activity Timeline)
+- 🏢 Contacts & Accounts Management
+- 💼 Sales Deals Pipeline with Stage Tracking
+- ✅ Tasks & Follow-up Scheduling (linked to Leads, Contacts, Deals)
+- 📊 Reports & Analytics Dashboard with Bar & Pie Charts
+- 📥 CSV Export for all reports
+- 🔄 Lead-to-Contact Conversion workflow
+- 📱 Responsive, modern UI
 
 ## Architecture & Database Schema
 The backend uses MVC architecture. The database has three main tables:
@@ -68,22 +81,33 @@ CREATE DATABASE crm_db;
 
 ## Deployment Guide
 
-### Database (PlanetScale / Railway)
-1. Provision a MySQL database on Railway or PlanetScale.
-2. Obtain the connection URL or host/user/pass credentials.
+### Database (TiDB Serverless — Free)
+1. Sign up at https://tidbcloud.com/ and create a free Serverless cluster.
+2. Click **Connect** and generate a password.
+3. Note the Host, Port (4000), Username, and Password.
 
-### Backend (Render / Heroku)
+### Backend (Render.com — Free)
 1. Push your code to GitHub.
-2. Connect your repo in Render and set the root directory to `backend/`.
-3. Set the build command to `npm install`.
-4. Set the start command to `node server.js`.
-5. Add the environment variables from your DB provider and generate a strong `JWT_SECRET`.
+2. Go to Render → New Web Service → Connect GitHub repo.
+3. Set **Root Directory** to `backend`.
+4. Set **Build Command** to `npm install`.
+5. Set **Start Command** to `node server.js`.
+6. Add these Environment Variables:
+   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (from TiDB)
+   - `JWT_SECRET` (any random secure string)
+   - `NODE_ENV` = `production`
+   - `FRONTEND_URL` = `*`
 
-### Frontend (Vercel / Netlify)
+### Frontend (Vercel — Free)
 1. Import your GitHub repository to Vercel.
 2. Set the Framework Preset to **Vite**.
 3. Set the Root Directory to `frontend`.
 4. Add Environment Variable:
    - Key: `VITE_API_URL`
-   - Value: `https://your-backend-app.onrender.com/api` (Replace with your actual Render URL).
-5. Deploy. The application will now use the global `api.js` Axios instance to communicate automatically with your production backend.
+   - Value: `https://your-backend.onrender.com/api`
+5. Click **Deploy**.
+
+## 📦 Deployed At
+- **Frontend**: https://future-fs-02-lac.vercel.app
+- **Backend**: https://future-fs-02-1-42q7.onrender.com
+- **Repository**: https://github.com/lokeshmeesala05-commits/FUTURE_FS_02.git
