@@ -8,7 +8,7 @@ const Accounts = () => {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchAccounts = async () => {
+  const fetchAccounts = React.useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get(`/accounts`);
@@ -17,11 +17,11 @@ const Accounts = () => {
       console.error(err);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchAccounts();
-  }, []);
+  }, [fetchAccounts]);
 
   return (
     <div className="space-y-6">
@@ -39,17 +39,18 @@ const Accounts = () => {
           ) : accounts.length === 0 ? (
             <div className="p-8 text-center text-gray-500">No accounts found. Create them or convert leads to see them here.</div>
           ) : (
-            <table className="w-full text-left whitespace-nowrap">
-              <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">Account Name</th>
-                  <th className="px-6 py-4">Website</th>
-                  <th className="px-6 py-4">Industry</th>
-                  <th className="px-6 py-4">Owner</th>
-                  <th className="px-6 py-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
+            <div className="inline-block min-w-full align-middle">
+              <table className="w-full text-left whitespace-nowrap">
+                <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">Account Name</th>
+                    <th className="px-6 py-4">Website</th>
+                    <th className="px-6 py-4">Industry</th>
+                    <th className="px-6 py-4">Owner</th>
+                    <th className="px-6 py-4 text-right pr-12">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
                 {accounts.map(account => (
                   <tr key={account.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
@@ -78,8 +79,9 @@ const Accounts = () => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>

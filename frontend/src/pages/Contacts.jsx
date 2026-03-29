@@ -8,7 +8,7 @@ const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchContacts = async () => {
+  const fetchContacts = React.useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get(`/contacts`);
@@ -17,11 +17,11 @@ const Contacts = () => {
       console.error(err);
     }
     setLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [fetchContacts]);
 
   return (
     <div className="space-y-6">
@@ -39,17 +39,18 @@ const Contacts = () => {
           ) : contacts.length === 0 ? (
             <div className="p-8 text-center text-gray-500">No contacts found. Convert leads to see them here.</div>
           ) : (
-            <table className="w-full text-left whitespace-nowrap">
-              <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">Name</th>
-                  <th className="px-6 py-4">Contact Info</th>
-                  <th className="px-6 py-4">Account/Company</th>
-                  <th className="px-6 py-4">Title</th>
-                  <th className="px-6 py-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
+            <div className="inline-block min-w-full align-middle">
+              <table className="w-full text-left whitespace-nowrap">
+                <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">Name</th>
+                    <th className="px-6 py-4">Contact Info</th>
+                    <th className="px-6 py-4">Account/Company</th>
+                    <th className="px-6 py-4">Title</th>
+                    <th className="px-6 py-4 text-right pr-4 sm:pr-12">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
                 {contacts.map(contact => (
                   <tr key={contact.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
@@ -92,8 +93,9 @@ const Contacts = () => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import { AuthContext } from '../context/AuthContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Users, TrendingUp, Clock, Target, CheckCircle, AlertCircle, Calendar } from 'lucide-react';
+import { Users, TrendingUp, Clock, Target, CheckCircle, Calendar } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, trend, color }) => (
   <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
@@ -59,13 +59,13 @@ const Dashboard = () => {
   }));
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
-          <p className="text-gray-500">Here's what's happening with your sales pipeline today.</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
+          <p className="text-sm text-gray-500">Here's what's happening with your sales pipeline today.</p>
         </div>
-        <div className="flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-gray-100 shadow-sm text-sm font-medium text-gray-600">
+        <div className="hidden sm:flex items-center space-x-2 bg-white px-4 py-2 rounded-lg border border-gray-100 shadow-sm text-sm font-medium text-gray-600">
           <Clock size={16} />
           <span>Last updated: {new Date().toLocaleTimeString()}</span>
         </div>
@@ -88,7 +88,7 @@ const Dashboard = () => {
         />
         <StatCard 
           title="Conversion Rate" 
-          value={`${stats.conversionRate}%` || '0%'} 
+          value={`${stats.conversionRate ?? 0}%`} 
           icon={Target} 
           color="bg-purple-500" 
         />

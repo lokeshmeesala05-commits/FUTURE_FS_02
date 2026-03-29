@@ -129,8 +129,8 @@ const Deals = () => {
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="relative flex-1 max-w-full lg:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
           <input 
             type="text" 
@@ -140,7 +140,7 @@ const Deals = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
           <div className="flex items-center space-x-2">
             <Filter size={18} className="text-gray-400" />
             <select 
@@ -154,91 +154,95 @@ const Deals = () => {
               ))}
             </select>
           </div>
-          <div className="h-6 w-px bg-gray-200"></div>
+          <div className="hidden sm:block h-6 w-px bg-gray-200"></div>
           <div className="text-sm font-semibold text-gray-900">
-            Total: <span className="text-blue-600">₹{totalValue.toLocaleString()}</span>
+            Total: <span className="text-blue-600 font-bold">₹{totalValue.toLocaleString()}</span>
           </div>
         </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b border-gray-100">
-            <tr>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Deal Details</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Account & Contact</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Value</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Stage</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Expected Close</th>
-              <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-100">
-            {filteredDeals.map(deal => (
-              <tr key={deal.id} className="hover:bg-gray-50 transition">
-                <td className="px-6 py-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
-                      <Briefcase size={20} />
-                    </div>
-                    <span className="font-semibold text-gray-900">{deal.name}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="space-y-1">
-                    {deal.account && (
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Building2 size={14} className="mr-2" /> {deal.account.name}
+        <div className="overflow-x-auto">
+          <div className="inline-block min-w-full align-middle">
+            <table className="w-full text-left whitespace-nowrap">
+              <thead className="bg-gray-50 border-b border-gray-100">
+                <tr>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Deal Details</th>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Account & Contact</th>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Value</th>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Stage</th>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider">Expected Close</th>
+                  <th className="px-6 py-4 text-sm font-semibold text-gray-600 uppercase tracking-wider text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filteredDeals.map(deal => (
+                  <tr key={deal.id} className="hover:bg-gray-50 transition">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                          <Briefcase size={20} />
+                        </div>
+                        <span className="font-semibold text-gray-900">{deal.name}</span>
                       </div>
-                    )}
-                    {deal.contact && (
-                      <div className="flex items-center text-sm text-gray-400">
-                        <UserCircle size={14} className="mr-2" /> {deal.contact.name}
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="space-y-1">
+                        {deal.account && (
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Building2 size={14} className="mr-2" /> {deal.account.name}
+                          </div>
+                        )}
+                        {deal.contact && (
+                          <div className="flex items-center text-sm text-gray-400">
+                            <UserCircle size={14} className="mr-2" /> {deal.contact.name}
+                          </div>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="font-bold text-gray-900">₹{parseFloat(deal.value).toLocaleString()}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className={`px-3 py-1 text-xs font-semibold rounded-full ${STAGE_COLORS[deal.stage]}`}>
-                    {deal.stage}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <Calendar size={14} className="mr-2" />
-                    {deal.expectedCloseDate ? new Date(deal.expectedCloseDate).toLocaleDateString() : 'Not set'}
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-right flex justify-end space-x-2">
-                  <button 
-                    onClick={() => navigate(`/tasks?relatedType=Deal&relatedId=${deal.id}&title=Follow up on ${deal.name}`)}
-                    className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
-                    title="Schedule Task"
-                  >
-                    <CheckCircle size={16} />
-                    <span>Task</span>
-                  </button>
-                  <button 
-                    onClick={() => handleOpenModal(deal)}
-                    className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition"
-                  >
-                    Edit
-                  </button>
-                </td>
-              </tr>
-            ))}
-            {filteredDeals.length === 0 && (
-              <tr>
-                <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
-                  No deals found. Create your first opportunity to start tracking revenue!
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="font-bold text-gray-900">₹{parseFloat(deal.value).toLocaleString()}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-3 py-1 text-xs font-semibold rounded-full ${STAGE_COLORS[deal.stage]}`}>
+                        {deal.stage}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <Calendar size={14} className="mr-2" />
+                        {deal.expectedCloseDate ? new Date(deal.expectedCloseDate).toLocaleDateString() : 'Not set'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-right flex justify-end space-x-2">
+                      <button 
+                        onClick={() => navigate(`/tasks?relatedType=Deal&relatedId=${deal.id}&title=Follow up on ${deal.name}`)}
+                        className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
+                        title="Schedule Task"
+                      >
+                        <CheckCircle size={16} />
+                        <span>Task</span>
+                      </button>
+                      <button 
+                        onClick={() => handleOpenModal(deal)}
+                        className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition"
+                      >
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+                {filteredDeals.length === 0 && (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-12 text-center text-gray-500">
+                      No deals found. Create your first opportunity to start tracking revenue!
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       {isModalOpen && (
@@ -250,7 +254,7 @@ const Deals = () => {
                 <X size={24} />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto max-h-[70vh]">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Deal Name *</label>
                 <input 
@@ -262,8 +266,8 @@ const Deals = () => {
                   onChange={e => setFormData({...formData, name: e.target.value})} 
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
+ 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Value (₹) *</label>
                   <input 
@@ -288,8 +292,8 @@ const Deals = () => {
                   </select>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
+ 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Related Account</label>
                   <select 
@@ -317,7 +321,7 @@ const Deals = () => {
                   </select>
                 </div>
               </div>
-
+ 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Expected Close Date</label>
                 <div className="relative">
@@ -330,18 +334,18 @@ const Deals = () => {
                   />
                 </div>
               </div>
-
-              <div className="pt-4 flex justify-end space-x-3">
+ 
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 sm:gap-0">
                 <button 
                   type="button" 
                   onClick={() => setIsModalOpen(false)} 
-                  className="px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition"
+                  className="w-full sm:w-auto px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition"
                 >
                   {formData.id ? 'Update Deal' : 'Create Deal'}
                 </button>

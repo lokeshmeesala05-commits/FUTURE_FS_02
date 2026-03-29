@@ -46,7 +46,7 @@ sequelize.authenticate()
     console.log('Database connected successfully.');
     // Sync models safely based on environment
     const isDev = process.env.NODE_ENV !== 'production';
-    return sequelize.sync({ alter: isDev });
+    return sequelize.sync({ alter: false });
   })
   .then(() => {
     console.log(`Database synced successfully (alter: ${process.env.NODE_ENV !== 'production'})`);

@@ -24,7 +24,7 @@ const Leads = () => {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', source: '', status: 'New', notes: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const fetchLeads = async () => {
+  const fetchLeads = React.useCallback(async () => {
     setLoading(true);
     try {
       const res = await api.get('/leads', {
@@ -35,14 +35,14 @@ const Leads = () => {
       console.error(err);
     }
     setLoading(false);
-  };
+  }, [search, statusFilter]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchLeads();
     }, 300);
     return () => clearTimeout(delayDebounceFn);
-  }, [search, statusFilter]);
+  }, [search, statusFilter, fetchLeads]);
 
   const handleOpenModal = (lead = null) => {
     if (lead) {
@@ -122,24 +122,25 @@ const Leads = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          {loading ? (
-             <div className="p-8 text-center text-gray-500">Loading leads...</div>
-          ) : leads.length === 0 ? (
-             <div className="p-8 text-center text-gray-500">No leads found matching your criteria.</div>
-          ) : (
-            <table className="w-full text-left whitespace-nowrap">
-              <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
-                <tr>
-                  <th className="px-6 py-4">Lead Name</th>
-                  <th className="px-6 py-4">Contact Info</th>
-                  <th className="px-6 py-4">Source</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4">Date Added</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
+        <div className="overflow-x-auto -mx-1 sm:mx-0">
+          <div className="inline-block min-w-full align-middle">
+            {loading ? (
+               <div className="p-8 text-center text-gray-500">Loading leads...</div>
+            ) : leads.length === 0 ? (
+               <div className="p-8 text-center text-gray-500">No leads found matching your criteria.</div>
+            ) : (
+              <table className="w-full text-left whitespace-nowrap">
+                <thead className="bg-gray-50 text-gray-600 text-sm font-medium border-b border-gray-100">
+                  <tr>
+                    <th className="px-6 py-4">Lead Name</th>
+                    <th className="px-6 py-4">Contact Info</th>
+                    <th className="px-6 py-4">Source</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4">Date Added</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
                 {leads.map(lead => (
                   <tr key={lead.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
@@ -183,9 +184,10 @@ const Leads = () => {
                     </td>
                   </tr>
                 ))}
-              </tbody>
-            </table>
-          )}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
 
@@ -199,8 +201,8 @@ const Leads = () => {
               </button>
             </div>
             <form onSubmit={handleSave} className="p-6 space-y-4 overflow-y-auto">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                   <input required type="text" className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
                 </div>
@@ -222,14 +224,14 @@ const Leads = () => {
                     {STATUS_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                   </select>
                 </div>
-                <div className="col-span-2">
+                <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
                   <textarea rows="3" className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500" value={formData.notes} onChange={e => setFormData({...formData, notes: e.target.value})}></textarea>
                 </div>
               </div>
-              <div className="pt-4 flex justify-end space-x-3">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition">Cancel</button>
-                <button type="submit" className="px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition">Save Lead</button>
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 sm:gap-0">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="w-full sm:w-auto px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition">Cancel</button>
+                <button type="submit" className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition">Save Lead</button>
               </div>
             </form>
           </div>

@@ -35,37 +35,37 @@ const Tasks = () => {
   });
 
   const fetchTasks = async () => {
+    setLoading(true);
     try {
       const res = await api.get('/tasks');
       setTasks(res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    setLoading(true);
-    fetchTasks().finally(() => {
-      setLoading(false);
-      
-      // Handle query params for pre-filling
-      const params = new URLSearchParams(location.search);
-      const relatedType = params.get('relatedType');
-      const relatedId = params.get('relatedId');
-      const title = params.get('title');
-      
-      if (relatedType || title) {
-        setFormData({
-          title: title || '',
-          description: '',
-          dueDate: new Date().toISOString().split('T')[0],
-          priority: 'Medium',
-          relatedType: relatedType || 'None',
-          relatedId: relatedId || ''
-        });
-        setIsModalOpen(true);
-      }
-    });
+    fetchTasks();
+
+    // Handle query params for pre-filling
+    const params = new URLSearchParams(location.search);
+    const relatedType = params.get('relatedType');
+    const relatedId = params.get('relatedId');
+    const title = params.get('title');
+
+    if (relatedType || title) {
+      setFormData({
+        title: title || '',
+        description: '',
+        dueDate: new Date().toISOString().split('T')[0],
+        priority: 'Medium',
+        relatedType: relatedType || 'None',
+        relatedId: relatedId || ''
+      });
+      setIsModalOpen(true);
+    }
   }, [location]);
 
   const handleOpenModal = (task = null) => {
@@ -96,8 +96,6 @@ const Tasks = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
-      
       // Sanitize formData
       const submissionData = { ...formData };
       if (!submissionData.relatedId || submissionData.relatedId === '') {
@@ -145,22 +143,22 @@ const Tasks = () => {
   if (loading) return <div className="p-8 text-center text-gray-500">Loading tasks...</div>;
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Tasks & Follow-ups</h1>
-          <p className="text-gray-500">Stay organized and never miss a meeting.</p>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-900">Tasks &amp; Follow-ups</h1>
+          <p className="text-sm text-gray-500">Stay organized and never miss a meeting.</p>
         </div>
         <button 
           onClick={() => handleOpenModal()}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition shadow-sm"
+          className="self-start sm:self-auto bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition shadow-sm"
         >
           <Plus size={20} />
           <span>Add Task</span>
         </button>
       </div>
 
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center gap-4">
+      <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col lg:flex-row lg:items-center gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input 
@@ -171,9 +169,9 @@ const Tasks = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <select 
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="flex-1 sm:flex-none border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             value={filterPriority}
             onChange={(e) => setFilterPriority(e.target.value)}
           >
@@ -183,7 +181,7 @@ const Tasks = () => {
             <option value="Low">Low Priority</option>
           </select>
           <select 
-            className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="flex-1 sm:flex-none border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
           >
@@ -263,7 +261,7 @@ const Tasks = () => {
                 <X size={24} />
               </button>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto max-h-[75vh]">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Task Title *</label>
                 <input 
@@ -275,7 +273,7 @@ const Tasks = () => {
                   onChange={e => setFormData({...formData, title: e.target.value})} 
                 />
               </div>
-
+ 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
                 <textarea 
@@ -285,8 +283,8 @@ const Tasks = () => {
                   onChange={e => setFormData({...formData, description: e.target.value})} 
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
+ 
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
                   <input 
@@ -309,7 +307,7 @@ const Tasks = () => {
                   </select>
                 </div>
               </div>
-
+ 
               {formData.id && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
@@ -325,18 +323,18 @@ const Tasks = () => {
                   </select>
                 </div>
               )}
-
-              <div className="pt-4 flex justify-end space-x-3">
+ 
+              <div className="pt-4 flex flex-col-reverse sm:flex-row justify-end gap-3 sm:space-x-3 sm:gap-0">
                 <button 
                   type="button" 
                   onClick={() => setIsModalOpen(false)} 
-                  className="px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition"
+                  className="w-full sm:w-auto px-5 py-2.5 text-gray-700 font-medium hover:bg-gray-100 rounded-lg transition"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
-                  className="px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-blue-600 text-white font-medium hover:bg-blue-700 rounded-lg transition"
                 >
                   {formData.id ? 'Update Task' : 'Create Task'}
                 </button>
