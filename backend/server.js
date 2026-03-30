@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+// Forced redeploy to verify fix
 
 const sequelize = require('./config/database');
 
