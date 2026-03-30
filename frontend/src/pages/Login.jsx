@@ -14,10 +14,14 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      await login(email, password);
-      navigate('/');
+      const res = await login(email, password);
+      if (res.success) {
+        navigate('/');
+      } else if (res.requiresVerification) {
+        navigate('/verify-email', { state: { email: res.email } });
+      }
     } catch (err) {
-      setError('Invalid email or password');
+      setError(err.response?.data?.message || 'Invalid email or password');
     }
   };
 

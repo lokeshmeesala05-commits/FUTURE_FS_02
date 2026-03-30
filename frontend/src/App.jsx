@@ -12,10 +12,20 @@ import Accounts from './pages/Accounts';
 import Deals from './pages/Deals';
 import Tasks from './pages/Tasks';
 import Reports from './pages/Reports';
+import VerifyEmail from './pages/VerifyEmail';
 
 const PrivateRoute = ({ children }) => {
-  const { user } = React.useContext(AuthContext);
-  return user ? children : <Navigate to="/login" />;
+  const { user, loading } = React.useContext(AuthContext);
+  
+  if (loading) return null;
+  
+  if (!user) return <Navigate to="/login" />;
+  
+  if (user.requiresVerification) {
+    return <Navigate to="/verify-email" />;
+  }
+  
+  return children;
 };
 
 function App() {
@@ -25,6 +35,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
              <Route index element={<Dashboard />} />
              <Route path="leads" element={<Leads />} />

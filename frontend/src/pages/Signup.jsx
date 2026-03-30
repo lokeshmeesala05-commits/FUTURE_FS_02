@@ -17,8 +17,10 @@ const Signup = () => {
     e.preventDefault();
     setError('');
     try {
-      await register(name, email, password, role);
-      navigate('/');
+      const res = await register(name, email, password, role);
+      if (res.success) {
+        navigate('/verify-email', { state: { email } });
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
     }

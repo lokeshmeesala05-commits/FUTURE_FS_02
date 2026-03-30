@@ -26,6 +26,18 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.ENUM('Admin', 'Sales User'),
     defaultValue: 'Sales User',
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  otp: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  otpExpires: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   timestamps: true,
