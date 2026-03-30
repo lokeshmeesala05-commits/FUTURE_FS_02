@@ -41,16 +41,37 @@ app.get('/api/health', (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
+// Safe migration: add new columns if they don't exist (works on TiDB & MySQL)
+const runMigrations = async () => {
+  const qi = sequelize.getQueryInterface();
+  const tableDesc = await qi.describeTable('users').catch(() => null);
+  if (!tableDesc) {
+    console.log('Users table not found, skipping migration.');
+    return;
+  }
+  if (!tableDesc.isVerified) {
+    await sequelize.query("ALTER TABLE users ADD COLUMN isVerified TINYINT(1) NOT NULL DEFAULT 0");
+    console.log('Migration: added isVerified column');
+  }
+  if (!tableDesc.otp) {
+    await sequelize.query("ALTER TABLE users ADD COLUMN otp VARCHAR(10) DEFAULT NULL");
+    console.log('Migration: added otp column');
+  }
+  if (!tableDesc.otpExpires) {
+    await sequelize.query("ALTER TABLE users ADD COLUMN otpExpires DATETIME DEFAULT NULL");
+    console.log('Migration: added otpExpires column');
+  }
+};
+
 // Connect to database and start server
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected successfully.');
-    // Sync models safely based on environment
-    const isDev = process.env.NODE_ENV !== 'production';
     return sequelize.sync({ alter: false });
   })
-  .then(() => {
-    console.log(`Database synced successfully (alter: ${process.env.NODE_ENV !== 'production'})`);
+  .then(async () => {
+    console.log('Database synced successfully.');
+    await runMigrations();
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
