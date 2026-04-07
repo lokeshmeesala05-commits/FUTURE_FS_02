@@ -34,9 +34,14 @@ app.use('/api/deals', dealRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/reports', reportRoutes);
 
-// Basic health check
+// Basic health check with deployment version
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', message: 'API is running' });
+  res.json({ 
+    status: 'ok', 
+    message: 'API is running',
+    version: '1.1.0',
+    deployedAt: new Date().toISOString()
+  });
 });
 
 const PORT = process.env.PORT || 5000;

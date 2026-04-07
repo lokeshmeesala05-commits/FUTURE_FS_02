@@ -7,6 +7,8 @@ const sendOTP = async (email, otp) => {
   let transporter;
 
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+    console.log('--- REAL SMTP SERVICE CONFIGURATION ---');
+    console.log('Using SMTP Host:', process.env.SMTP_HOST);
     transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT || 587,
@@ -18,6 +20,9 @@ const sendOTP = async (email, otp) => {
     });
   } else {
     // Fallback to Ethereal Mail for easy testing
+    console.log('--- WARNING: NO REAL SMTP CONFIGURED ---');
+    console.log('OTP emails will NOT be sent to real inboxes.');
+    console.log('Check server logs for Ethereal Mail preview URLs.');
     const testAccount = await nodemailer.createTestAccount();
     transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
@@ -28,9 +33,6 @@ const sendOTP = async (email, otp) => {
         pass: testAccount.pass,
       },
     });
-    console.log('--- TEST EMAIL SERVICE ---');
-    console.log('Using Ethereal Mail for testing.');
-    console.log('Preview URL will be logged below.');
   }
 
   const mailOptions = {
