@@ -39,7 +39,7 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     message: 'API is running',
-    version: '1.1.0',
+    version: '1.2.0',
     deployedAt: new Date().toISOString()
   });
 });
