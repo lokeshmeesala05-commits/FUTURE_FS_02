@@ -10,6 +10,7 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT || 4000,
     dialect: 'mysql',
     logging: false,
+    timezone: '+00:00', // Tells Sequelize/mysql2 that datetime strings from DB represent UTC time
     dialectOptions: {
       ssl: {
         require: true,

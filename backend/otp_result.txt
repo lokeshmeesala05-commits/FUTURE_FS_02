@@ -1,0 +1,25 @@
+﻿[dotenv@17.3.1] injecting env (7) from .env -- tip: ΓÜÖ∩╕Å  override existing env vars with { override: true }
+[dotenv@17.3.1] injecting env (0) from .env -- tip: ΓÜÖ∩╕Å  load multiple .env files with { path: ['.env.local', '.env'] }
+DB connected
+
+--- CREATING USER ---
+otpExpires JS Date: 2026-03-31T09:27:16.666Z
+otpExpires getTime: 1774949236666
+Date.now(): 1774948336667
+Should be valid for 15 mins
+
+--- READING BACK FROM DB ---
+otpExpires from DB: 2026-03-31T09:27:16.000Z
+typeof otpExpires: object
+DB returned a Date object
+getTime: 1774949236000
+Date.now(): 1774948336844
+
+--- OLD CHECK (u.otpExpires < Date.now()) ---
+Expired? false (should be FALSE for a just-created OTP)
+
+--- NEW CHECK (UTC-forced) ---
+expiresMs: 1774949236000
+Expired? false (should be FALSE for a just-created OTP)
+
+Test user cleaned up.

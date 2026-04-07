@@ -73,8 +73,15 @@ const verifyEmail = async (req, res) => {
       return res.status(400).json({ message: 'Email is already verified' });
     }
 
-    if (user.otp !== otp || user.otpExpires < Date.now()) {
-      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    // Safely check expiration by converting to getTime() ensuring it's relative
+    const isExpired = user.otpExpires ? new Date(user.otpExpires).getTime() < Date.now() : true;
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
+
+    if (isExpired) {
+      return res.status(400).json({ message: 'Expired OTP. Please request a new one.' });
     }
 
     user.isVerified = true;
@@ -149,6 +156,12 @@ const loginUser = async (req, res) => {
         token: generateToken(user.id, user.role)
       });
     } else {
+      // Check if the user accidentally entered their OTP instead of their password
+      if (user && !user.isVerified && user.otp === password) {
+        return res.status(401).json({ 
+          message: 'You entered your verification code instead of your password. Please use your actual password to log in.' 
+        });
+      }
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
