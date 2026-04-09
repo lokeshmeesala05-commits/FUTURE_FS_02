@@ -47,7 +47,7 @@ const authorize = (...roles) => {
 const app = express();
 
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: true, // This allows the request origin automatically
   credentials: true
 }));
 app.use(express.json());
