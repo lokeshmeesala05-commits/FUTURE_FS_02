@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Plus, Search, Filter, X, Phone, Mail, Eye } from 'lucide-react';
 
 const STATUS_COLORS = {
+  'new': 'bg-blue-100 text-blue-800',
   'New': 'bg-blue-100 text-blue-800',
   'Contacted': 'bg-purple-100 text-purple-800',
   'Interested': 'bg-yellow-100 text-yellow-800',
@@ -173,7 +174,7 @@ const Leads = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(lead.createdAt).toLocaleDateString()}
+                      {new Date(lead.created_at || lead.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right space-x-3">
                       <Link to={`/leads/${lead.id}`} className="text-gray-400 hover:text-blue-600 transition" title="View Details">

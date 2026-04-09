@@ -4,6 +4,7 @@ import api from '../api';
 import { ArrowLeft, Mail, Phone, Calendar, Clock, User as UserIcon, UserCheck, X, CheckCircle } from 'lucide-react';
 
 const STATUS_COLORS = {
+  'new': 'bg-blue-100 text-blue-800',
   'New': 'bg-blue-100 text-blue-800',
   'Contacted': 'bg-purple-100 text-purple-800',
   'Interested': 'bg-yellow-100 text-yellow-800',
@@ -137,15 +138,15 @@ const LeadDetails = () => {
               )}
               <div className="flex items-start text-sm text-gray-600">
                 <Calendar size={16} className="mr-3 mt-0.5 text-gray-400" />
-                <span>Added: {new Date(lead.createdAt).toLocaleDateString()}</span>
+                <span>Added: {new Date(lead.created_at || lead.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
           </div>
           
-          {lead.notes && (
+          {(lead.factors || lead.notes) && (
              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-               <h3 className="text-sm border-b border-gray-100 pb-2 mb-3 font-semibold text-gray-800">Lead Notes</h3>
-               <p className="text-gray-600 text-sm italic">{lead.notes}</p>
+               <h3 className="text-sm border-b border-gray-100 pb-2 mb-3 font-semibold text-gray-800">Requirements / Factors</h3>
+               <p className="text-gray-600 text-sm italic">{lead.factors || lead.notes}</p>
              </div>
           )}
         </div>

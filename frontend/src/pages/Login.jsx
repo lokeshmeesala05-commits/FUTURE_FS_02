@@ -16,7 +16,7 @@ const Login = () => {
     try {
       const res = await login(email, password);
       if (res.success) {
-        navigate('/');
+        navigate('/app/leads');
       } else if (res.requiresVerification) {
         navigate('/verify-email', { state: { email: res.email } });
       }
