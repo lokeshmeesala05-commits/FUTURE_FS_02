@@ -204,6 +204,11 @@ const createTask = async (req, res) => {
 
 // --- ROUTES ---
 
+// Root Route
+app.get('/', (req, res) => {
+  res.send('<h1>CRM Pro API</h1><p>The backend is running successfully. <a href="/api/health">Check API Health</a></p>');
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'API is running', version: '3.0.0' });
