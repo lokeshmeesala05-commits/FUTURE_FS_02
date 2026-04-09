@@ -2,6 +2,12 @@
 
 Production-ready Customer Relationship Management web application built with a modern, serverless-first stack.
 
+## 🚀 Live Links
+
+- **Frontend (Vercel)**: [https://future-fs-02-h9a4yc1bu-lokeshmeesala05-commits-projects.vercel.app/](https://future-fs-02-h9a4yc1bu-lokeshmeesala05-commits-projects.vercel.app/)
+- **Backend (Render)**: [https://future-fs-02-1-42q7.onrender.com](https://future-fs-02-1-42q7.onrender.com)
+- **Database (Supabase)**: [https://wrlztepbeyutmzhhbiud.supabase.co](https://wrlztepbeyutmzhhbiud.supabase.co)
+
 ## Tech Stack
 
 - **Frontend**: React.js (Vite), Tailwind CSS, React Router DOM, Lucide React
