@@ -4,7 +4,7 @@ Production-ready Customer Relationship Management web application built with a m
 
 ## 🚀 Live Links
 
-- **Frontend (Vercel)**: [https://future-fs-02-h9a4yc1bu-lokeshmeesala05-commits-projects.vercel.app/](https://future-fs-02-h9a4yc1bu-lokeshmeesala05-commits-projects.vercel.app/)
+- **Frontend (Vercel)**: [https://future-fs-02-m65wlasml-lokeshmeesala05-commits-projects.vercel.app](https://future-fs-02-m65wlasml-lokeshmeesala05-commits-projects.vercel.app)
 - **Backend (Render)**: [https://future-fs-02-1-42q7.onrender.com](https://future-fs-02-1-42q7.onrender.com)
 - **Database (Supabase Dashboard)**: [https://supabase.com/dashboard/project/wrlztepbeyutmzhhbiud](https://supabase.com/dashboard/project/wrlztepbeyutmzhhbiud)
 
