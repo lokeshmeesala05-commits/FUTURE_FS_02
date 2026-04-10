@@ -216,7 +216,7 @@ const Deals = () => {
                     </td>
                     <td className="px-6 py-4 text-right flex justify-end space-x-2">
                       <button 
-                        onClick={() => navigate(`/tasks?relatedType=Deal&relatedId=${deal.id}&title=Follow up on ${deal.name}`)}
+                        onClick={() => navigate(`/app/tasks?relatedType=Deal&relatedId=${deal.id}&title=Follow up on ${deal.name}`)}
                         className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
                         title="Schedule Task"
                       >

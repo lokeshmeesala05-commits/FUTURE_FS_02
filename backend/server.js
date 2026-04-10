@@ -202,7 +202,94 @@ const createTask = async (req, res) => {
     } catch (error) { res.status(500).json({ message: error.message }); }
 };
 
+
+// --- DASHBOARD & REPORTS CONTROLLERS ---
+const getDashboardStats = async (req, res) => {
+    try {
+        const [leadsCount, dealsSum, tasksCount, leadsByStatus, dealsByStage, upcomingTasks] = await Promise.all([
+            supabase.from('leads').select('*', { count: 'exact', head: true }),
+            supabase.from('deals').select('value'),
+            supabase.from('tasks').select('*', { count: 'exact', head: true }).eq('status', 'Pending'),
+            supabase.rpc('get_leads_by_status'), // We'll need to check if these RPCs exist or use regular queries
+            supabase.rpc('get_deals_by_stage'),
+            supabase.from('tasks').select('*').eq('status', 'Pending').order('due_date').limit(5)
+        ]);
+
+        // Fallback for RPCs if they don't exist
+        let lbs = leadsByStatus.data;
+        if (!lbs) {
+            const { data } = await supabase.from('leads').select('status');
+            const counts = data.reduce((acc, curr) => {
+                acc[curr.status] = (acc[curr.status] || 0) + 1;
+                return acc;
+            }, {});
+            lbs = Object.keys(counts).map(status => ({ status, count: counts[status] }));
+        }
+
+        let dbs = dealsByStage.data;
+        if (!dbs) {
+            const { data } = await supabase.from('deals').select('stage, value');
+            const stages = data.reduce((acc, curr) => {
+                if (!acc[curr.stage]) acc[curr.stage] = 0;
+                acc[curr.stage] += parseFloat(curr.value || 0);
+                return acc;
+            }, {});
+            dbs = Object.keys(stages).map(stage => ({ stage, totalValue: stages[stage] }));
+        }
+
+        const totalPipelineValue = (dealsSum.data || []).reduce((sum, d) => sum + parseFloat(d.value || 0), 0);
+
+        res.json({
+            totalLeads: leadsCount.count || 0,
+            totalPipelineValue,
+            pendingTasksCount: tasksCount.count || 0,
+            leadsByStatus: lbs,
+            dealsByStage: dbs,
+            upcomingTasks: upcomingTasks.data || [],
+            conversionRate: 15 // Mock conversion rate for now
+        });
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
+
+const getLeadsReport = async (req, res) => {
+    try {
+        const { data } = await supabase.from('leads').select('status');
+        const counts = data.reduce((acc, curr) => {
+            acc[curr.status] = (acc[curr.status] || 0) + 1;
+            return acc;
+        }, {});
+        const report = Object.keys(counts).map(status => ({ status, count: counts[status] }));
+        res.json(report);
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
+
+const getRevenueReport = async (req, res) => {
+    try {
+        const { data } = await supabase.from('deals').select('stage, value');
+        const stages = data.reduce((acc, curr) => {
+            if (!acc[curr.stage]) acc[curr.stage] = 0;
+            acc[curr.stage] += parseFloat(curr.value || 0);
+            return acc;
+        }, {});
+        const report = Object.keys(stages).map(stage => ({ stage, totalValue: stages[stage] }));
+        res.json(report);
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
+
+const getTasksReport = async (req, res) => {
+    try {
+        const { data } = await supabase.from('tasks').select('status');
+        const counts = data.reduce((acc, curr) => {
+            acc[curr.status] = (acc[curr.status] || 0) + 1;
+            return acc;
+        }, {});
+        const report = Object.keys(counts).map(status => ({ status, count: counts[status] }));
+        res.json(report);
+    } catch (error) { res.status(500).json({ message: error.message }); }
+};
+
 // --- ROUTES ---
+
 
 // Root Route
 app.get('/', (req, res) => {
@@ -230,6 +317,13 @@ app.post('/api/inquiry', submitInquiry);
 
 // Lead Routes (Protected)
 app.get('/api/leads', protect, getLeads);
+app.post('/api/leads', protect, async (req, res) => {
+    try {
+        const { data, error } = await supabase.from('leads').insert([{ ...req.body, owner_id: req.user.id }]).select();
+        if (error) throw error;
+        res.status(201).json(data[0]);
+    } catch (error) { res.status(500).json({ message: error.message }); }
+});
 app.get('/api/leads/:id', protect, async (req, res) => {
     const { data: lead, error } = await supabase.from('leads').select('*').eq('id', req.params.id).single();
     if (error || !lead) return res.status(404).json({ message: 'Lead not found' });
@@ -301,6 +395,12 @@ app.delete('/api/tasks/:id', protect, async (req, res) => {
     if (error) return res.status(500).json({ message: error.message });
     res.json({ message: 'Task removed' });
 });
+
+// Dashboard & Reports Routes (Protected)
+app.get('/api/dashboard/stats', protect, getDashboardStats);
+app.get('/api/reports/leads', protect, getLeadsReport);
+app.get('/api/reports/revenue', protect, getRevenueReport);
+app.get('/api/reports/tasks', protect, getTasksReport);
 
 
 

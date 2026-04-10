@@ -79,13 +79,13 @@ const LeadDetails = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center">
-        <button onClick={() => navigate('/leads')} className="text-gray-500 hover:text-gray-800 flex items-center space-x-2">
+        <button onClick={() => navigate('/app/leads')} className="text-gray-500 hover:text-gray-800 flex items-center space-x-2">
           <ArrowLeft size={16} /> <span>Back to Leads</span>
         </button>
         
         <div className="flex space-x-2">
           <button 
-            onClick={() => navigate(`/tasks?relatedType=Lead&relatedId=${id}&title=Follow up with ${lead.name}`)}
+            onClick={() => navigate(`/app/tasks?relatedType=Lead&relatedId=${id}&title=Follow up with ${lead.name}`)}
             className="bg-blue-50 text-blue-600 px-5 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-100 transition font-medium"
           >
             <CheckCircle size={18} />

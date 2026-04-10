@@ -157,7 +157,7 @@ const Dashboard = () => {
             ) : (
               <p className="text-sm text-gray-500 text-center py-4">No upcoming tasks.</p>
             )}
-            <button className="w-full text-center text-sm font-medium text-blue-600 hover:text-blue-700 mt-2" onClick={() => navigate('/tasks')}>
+            <button className="w-full text-center text-sm font-medium text-blue-600 hover:text-blue-700 mt-2" onClick={() => navigate('/app/tasks')}>
                View All Tasks
             </button>
           </div>
@@ -166,13 +166,13 @@ const Dashboard = () => {
         <div className="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <h2 className="text-lg font-semibold text-gray-800 mb-6 font-semibold">Quick Actions</h2>
           <div className="space-y-3">
-             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/leads')}>
+             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/app/leads')}>
                 Add New Lead
              </button>
-             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/deals')}>
+             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/app/deals')}>
                 Create New Deal
              </button>
-             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/tasks')}>
+             <button className="w-full text-left px-4 py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition" onClick={() => navigate('/app/tasks')}>
                 Add Follow-up Task
              </button>
           </div>

@@ -145,7 +145,7 @@ const Leads = () => {
                 {leads.map(lead => (
                   <tr key={lead.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
-                      <Link to={`/leads/${lead.id}`} className="flex items-center space-x-3 group">
+                      <Link to={`/app/leads/${lead.id}`} className="flex items-center space-x-3 group">
                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold group-hover:bg-blue-600 group-hover:text-white transition">
                             {lead.name.charAt(0).toUpperCase()}
                          </div>
@@ -177,7 +177,7 @@ const Leads = () => {
                       {new Date(lead.created_at || lead.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-right space-x-3">
-                      <Link to={`/leads/${lead.id}`} className="text-gray-400 hover:text-blue-600 transition" title="View Details">
+                      <Link to={`/app/leads/${lead.id}`} className="text-gray-400 hover:text-blue-600 transition" title="View Details">
                         <Eye size={18} className="inline" />
                       </Link>
                       <button onClick={() => handleOpenModal(lead)} className="text-blue-600 hover:text-blue-800 font-medium text-sm">Edit</button>

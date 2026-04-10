@@ -15,13 +15,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
 
   const links = [
-    { name: 'Dashboard', icon: LayoutDashboard, path: '/' },
-    { name: 'Leads', icon: Users, path: '/leads' },
-    { name: 'Contacts', icon: UserCheck, path: '/contacts' },
-    { name: 'Accounts', icon: Building, path: '/accounts' },
-    { name: 'Deals', icon: DollarSign, path: '/deals' },
-    { name: 'Tasks', icon: CheckCircle, path: '/tasks' },
-    { name: 'Reports', icon: BarChart, path: '/reports' },
+    { name: 'Dashboard', icon: LayoutDashboard, path: '/app' },
+    { name: 'Leads', icon: Users, path: '/app/leads' },
+    { name: 'Contacts', icon: UserCheck, path: '/app/contacts' },
+    { name: 'Accounts', icon: Building, path: '/app/accounts' },
+    { name: 'Deals', icon: DollarSign, path: '/app/deals' },
+    { name: 'Tasks', icon: CheckCircle, path: '/app/tasks' },
+    { name: 'Reports', icon: BarChart, path: '/app/reports' },
   ];
 
   const handleLinkClick = () => {
@@ -65,7 +65,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             const Icon = link.icon;
             const isActive =
               location.pathname === link.path ||
-              (link.path !== '/' && location.pathname.startsWith(link.path));
+              (link.path !== '/app' && location.pathname.startsWith(link.path));
             return (
               <Link
                 key={link.name}
